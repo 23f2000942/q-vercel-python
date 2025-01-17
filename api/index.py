@@ -8,6 +8,10 @@ marks_json=[{"name":"LUrtFZcK9U","marks":18},{"name":"P","marks":92},{"name":"9m
 class handler(BaseHTTPRequestHandler):
     def do_GET(self):
         # Parse query parameters (e.g., ?name=Alice&name=Bob)
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Methods', 'GET')
+        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
+
         query_params = self.parse_query_params()
         names = query_params.get('name', [])
         
