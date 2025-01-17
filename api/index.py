@@ -1,19 +1,23 @@
 import json
 from http.server import BaseHTTPRequestHandler
 
-# Mock data
-marks_json = [{"name": "Alice", "marks": 90}, {"name": "Bob", "marks": 80}, {"name": "Charlie", "marks": 85}]
+# Sample marks data
+marks_json = [
+    {"name": "Alice", "marks": 90},
+    {"name": "Bob", "marks": 80},
+    {"name": "Charlie", "marks": 85},
+]
 
 class handler(BaseHTTPRequestHandler):
     def do_GET(self):
-        # Parse the query parameters
+        # Parse query parameters (e.g., ?name=Alice&name=Bob)
         query_params = self.parse_query_params()
         names = query_params.get('name', [])
         
         # Fetch marks for the provided names
         marks = [self.get_marks(name) for name in names]
         
-        # Send the response
+        # Send the response as JSON
         self.send_response(200)
         self.send_header('Content-type', 'application/json')
         self.end_headers()
@@ -36,8 +40,9 @@ class handler(BaseHTTPRequestHandler):
         return parsed_params
 
     def get_marks(self, name):
-        """Helper method to get the marks for a given name."""
+        """Helper method to get the marks for a given name (case-insensitive)."""
+        name = name.lower()  # Convert the query name to lowercase
         for student in marks_json:
-            if student['name'] == name:
+            if student['name'].lower() == name:  # Convert student name to lowercase
                 return student['marks']
         return "Not Found"
